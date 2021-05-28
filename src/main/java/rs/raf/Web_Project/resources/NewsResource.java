@@ -1,6 +1,7 @@
 package rs.raf.Web_Project.resources;
 
 import rs.raf.Web_Project.entities.News;
+import rs.raf.Web_Project.response.PageResponse;
 import rs.raf.Web_Project.response.RestError;
 import rs.raf.Web_Project.services.NewsService;
 
@@ -44,6 +45,20 @@ public class NewsResource {
     }
 
     @GET
+    @Path("/tag/page/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allPaginatedforTag(@PathParam("id") Integer id, @QueryParam("start") int start, @QueryParam("size") int size) {
+        try{
+            List<News> news = this.newsService.allPaginatedForTag(id, start, size);
+            int count = this.newsService.countForTag(id);
+            return Response.status(200).entity(new PageResponse(news, count)).build();
+        }catch (Exception e){
+            return Response.status(404).entity(new RestError(404, "Pagination error")).build();
+        }
+
+    }
+
+    @GET
     @Path("/category/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<News> allForCategory(@PathParam("id") Integer id) {
@@ -51,9 +66,27 @@ public class NewsResource {
     }
 
     @GET
+    @Path("/category/page/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allPaginatedForCategory(@PathParam("id") Integer id, @QueryParam("start") int start, @QueryParam("size") int size) {
+        List<News> news = this.newsService.allPaginatedForCategory(id, start, size);
+        int count = this.newsService.countForCategory(id);
+        return Response.status(200).entity(new PageResponse(news, count)).build();
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<News> all() {
         return this.newsService.all();
+    }
+
+    @GET
+    @Path("/page")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allPaginated(@QueryParam("start") int start, @QueryParam("size") int size) {
+        List<News> news = this.newsService.allPaginated(start, size);
+        int count = this.newsService.count();
+        return Response.status(200).entity(new PageResponse(news, count)).build();
     }
 
     @GET

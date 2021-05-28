@@ -38,4 +38,16 @@ public class NewsService {
     public News find(Integer id) {
         return this.newsRepository.find(id);
     }
+
+    public List<News> allPaginatedForTag(Integer id, int start, int size) { return this.newsRepository.allPaginatedForTag(id, start, size); }
+
+    public List<News> allPaginated(int start, int size) { return this.newsRepository.allPaginated(start, size); }
+
+    public List<News> allPaginatedForCategory(Integer id, int start, int size) { return this.newsRepository.allPaginatedForCategory(id, start, size); }
+
+    public int count() { return this.newsRepository.count(); }
+
+    public int countForTag(int id){ return this.newsRepository.countForTag(id); }
+
+    public int countForCategory(int id){ return this.newsRepository.countForCategory(id); }
 }

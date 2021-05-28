@@ -1,5 +1,6 @@
 package rs.raf.Web_Project.repositories.news;
 
+import rs.raf.Web_Project.entities.Category;
 import rs.raf.Web_Project.entities.News;
 import rs.raf.Web_Project.entities.Tag;
 import rs.raf.Web_Project.repositories.MySqlAbstractRepository;
@@ -68,10 +69,14 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(6, news.getUserId());
             preparedStatement.setInt(7, news.getId());
             preparedStatement.executeUpdate();
-
+            this.closeStatement(preparedStatement);
+            preparedStatement = connection.prepareStatement("DELETE FROM news_tag where newsId = ?");
+            preparedStatement.setInt(1, news.getId());
+            preparedStatement.executeUpdate();
+            this.closeStatement(preparedStatement);
             if(news.getTags() != null) {
                 for (Tag tag : news.getTags()) {
-                    preparedStatement = connection.prepareStatement("INSERT INTO news_tag(tagId, newsId) values (?, ?)");
+                    preparedStatement = connection.prepareStatement("INSERT IGNORE INTO news_tag(tagId, newsId) values (?, ?)");
                     preparedStatement.setInt(1, tag.getId());
                     preparedStatement.setInt(2, news.getId());
                     preparedStatement.executeUpdate();
@@ -190,6 +195,36 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
     }
 
     @Override
+    public List<News> allPaginatedForCategory(Integer id, int start, int size) {
+        List<News> news = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM news where categoryId = ? order by Created_at desc limit ?, ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, start*size);
+            preparedStatement.setInt(3, size);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
     public List<News> allForTag(Integer tagId) {
         List<News> news = new ArrayList<>();
         Connection connection = null;
@@ -229,4 +264,136 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
 
         return news;
     }
+
+    @Override
+    public List<News> allPaginated(int start, int size) {
+        List<News> news = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM news order by Created_at desc limit ?, ?");
+            preparedStatement.setInt(1, start*size);
+            preparedStatement.setInt(2, size);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
+    public List<News> allPaginatedForTag(int id, int start, int size) {
+        List<News> news = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM news join news_tag nt on news.newsId = nt.newsId where nt.tagId = ? order by Created_at desc limit ?, ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, start*size);
+            preparedStatement.setInt(3, size);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
+    public int count() {
+        int count = 0;
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+            preparedStatement = connection.prepareStatement("select count(*) from news");
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+        return count;
+    }
+
+    @Override
+    public int countForCategory(int id) {
+        int count = 0;
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+            preparedStatement = connection.prepareStatement("select count(*) from news where categoryId = ?");
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+        return count;
+    }
+
+    @Override
+    public int countForTag(int id) {
+        int count = 0;
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+            preparedStatement = connection.prepareStatement("select count(*) from news join news_tag nt on news.newsId = nt.newsId where nt.tagId = ?");
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+        return count;
+    }
+
+
 }
