@@ -12,6 +12,7 @@ import rs.raf.Web_Project.resources.CommentResource;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 public class UserService {
     @Inject
@@ -24,14 +25,18 @@ public class UserService {
     }
 
     public User update(User user) {
-        String hashedPassword = DigestUtils.sha256Hex(user.getPassword());
-        user.setPassword(hashedPassword);
         return this.userRepository.update(user);
     }
 
     public User find(String email) {
         return this.userRepository.findUser(email);
     }
+
+    public List<User> allPaginated(int start, int size) {
+        return this.userRepository.allPaginated(start, size);
+    }
+
+    public int count() { return this.userRepository.count(); }
 
     public boolean deactivate(Integer id){
         return this.userRepository.deactivateUser(id);
@@ -41,7 +46,7 @@ public class UserService {
     {
         String hashedPassword = DigestUtils.sha256Hex(password);
         User user = this.userRepository.findUser(email);
-        if (user == null || !user.getPassword().equals(hashedPassword)) {
+        if (user == null || !user.getPassword().equals(hashedPassword) || user.isStatus()) {
             return null;
         }
 

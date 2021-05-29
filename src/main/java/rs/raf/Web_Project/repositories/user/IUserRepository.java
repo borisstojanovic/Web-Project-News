@@ -16,4 +16,8 @@ public interface IUserRepository {
     List<User> all();
 
     User update(User user);
+
+    List<User> allPaginated(int start, int size);
+
+    int count();
 }

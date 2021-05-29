@@ -4,6 +4,7 @@ import rs.raf.Web_Project.entities.Category;
 import rs.raf.Web_Project.entities.Comment;
 import rs.raf.Web_Project.entities.User;
 import rs.raf.Web_Project.requests.LoginRequest;
+import rs.raf.Web_Project.response.PageResponse;
 import rs.raf.Web_Project.response.RestError;
 import rs.raf.Web_Project.services.CommentService;
 import rs.raf.Web_Project.services.UserService;
@@ -78,5 +79,14 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean deactivate(@PathParam("id") Integer id) {
         return this.userService.deactivate(id);
+    }
+
+    @GET
+    @Path("/page")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allPaginated(@QueryParam("start") int start, @QueryParam("size") int size) {
+        List<User> users = this.userService.allPaginated(start, size);
+        int count = this.userService.count();
+        return Response.status(200).entity(new PageResponse(users, count)).build();
     }
 }

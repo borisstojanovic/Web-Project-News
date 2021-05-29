@@ -1,5 +1,6 @@
 package rs.raf.Web_Project.repositories.user;
 
+import rs.raf.Web_Project.entities.News;
 import rs.raf.Web_Project.entities.User;
 import rs.raf.Web_Project.entities.enums.Type;
 import rs.raf.Web_Project.repositories.MySqlAbstractRepository;
@@ -11,7 +12,6 @@ import java.util.List;
 public class MySqlUserRepository extends MySqlAbstractRepository implements IUserRepository{
     @Override
     public User findUser(String email) {
-        System.out.println(email);
         User user = null;
 
         Connection connection = null;
@@ -91,9 +91,8 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements IUse
         try {
             connection = this.newConnection();
             String[] generatedColumns = {"id"};
-            preparedStatement = connection.prepareStatement("UPDATE user set Status = ? where userId = ?", generatedColumns);
-            preparedStatement.setBoolean(1,false);
-            preparedStatement.setInt(2, id);
+            preparedStatement = connection.prepareStatement("UPDATE user set Status = !Status where userId = ?", generatedColumns);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             deactivated = true;
         } catch (SQLException e) {
@@ -178,6 +177,58 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements IUse
         }
 
         return user;
+    }
+
+    @Override
+    public List<User> allPaginated(int start, int size) {
+        List<User> users = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM user limit ?, ?");
+            preparedStatement.setInt(1, start*size);
+            preparedStatement.setInt(2, size);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                users.add(new User(resultSet.getInt("userId"), resultSet.getBoolean("Status"), Type.valueOf(resultSet.getString("Type")),
+                        resultSet.getString("Email"), resultSet.getString("FirstName"), resultSet.getString("LastName"), resultSet.getString("Password")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return users;
+    }
+
+    @Override
+    public int count() {
+        int count = 0;
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+            preparedStatement = connection.prepareStatement("select count(*) from user");
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+        return count;
     }
 
 
