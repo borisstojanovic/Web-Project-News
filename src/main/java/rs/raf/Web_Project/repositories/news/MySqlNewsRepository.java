@@ -1,6 +1,5 @@
 package rs.raf.Web_Project.repositories.news;
 
-import rs.raf.Web_Project.entities.Category;
 import rs.raf.Web_Project.entities.News;
 import rs.raf.Web_Project.entities.Tag;
 import rs.raf.Web_Project.repositories.MySqlAbstractRepository;
@@ -397,5 +396,88 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
         return count;
     }
 
+    @Override
+    public List<News> mostViewed(int start, int size) {
+        List<News> news = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+            preparedStatement = connection.prepareStatement("SELECT * FROM news where Created_at between DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW() order by Views, Created_at desc limit ?, ?");
+            if(size > 10){
+                size = 10;
+            }
+            preparedStatement.setInt(1, start*size);
+            preparedStatement.setInt(2, size);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
+    public List<News> allNewest(int start, int size) {
+        List<News> news = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+            preparedStatement = connection.prepareStatement("SELECT * FROM news order by Created_at desc limit ?, ?");
+            if(size > 10){
+                size = 10;
+            }
+            preparedStatement.setInt(1, start*size);
+            preparedStatement.setInt(2, size);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
+    public boolean incrementViews(int id) {
+        boolean incremented = false;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+            String[] generatedColumns = {"id"};
+            preparedStatement = connection.prepareStatement("UPDATE news set Views = Views+1 where newsId = ?", generatedColumns);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            incremented = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeConnection(connection);
+        }
+
+        return incremented;
+    }
 
 }

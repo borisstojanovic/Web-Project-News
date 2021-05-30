@@ -1,6 +1,5 @@
 package rs.raf.Web_Project.repositories.user;
 
-import rs.raf.Web_Project.entities.News;
 import rs.raf.Web_Project.entities.User;
 import rs.raf.Web_Project.entities.enums.Type;
 import rs.raf.Web_Project.repositories.MySqlAbstractRepository;
@@ -233,6 +232,46 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements IUse
             this.closeConnection(connection);
         }
         return count;
+    }
+
+    @Override
+    public User findUserById(Integer id) {
+        User user = null;
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM user where userId = ?");
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                int userId = resultSet.getInt("userId");
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
+                String password = resultSet.getString("Password");
+                String email = resultSet.getString("Email");
+                boolean status = resultSet.getBoolean("Status");
+                Type type = Type.valueOf(resultSet.getString("Type"));
+
+                user = new User(userId, status, type, email, firstName, lastName, password);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return user;
     }
 
 

@@ -1,4 +1,4 @@
-package rs.raf.Web_Project.resources;
+package rs.raf.Web_Project.resources.read;
 
 import rs.raf.Web_Project.entities.Comment;
 import rs.raf.Web_Project.services.CommentService;

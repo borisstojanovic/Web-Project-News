@@ -8,7 +8,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import rs.raf.Web_Project.entities.User;
 import rs.raf.Web_Project.entities.enums.Type;
 import rs.raf.Web_Project.repositories.user.IUserRepository;
-import rs.raf.Web_Project.resources.CommentResource;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -96,4 +95,6 @@ public class UserService {
         }
         return true;
     }
+
+    public User findById(Integer id) { return this.userRepository.findUserById(id); }
 }

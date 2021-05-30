@@ -18,9 +18,9 @@ import rs.raf.Web_Project.services.*;
 import javax.inject.Singleton;
 import javax.ws.rs.ApplicationPath;
 
-@ApplicationPath("/api")
-public class HelloApplication extends ResourceConfig {
-    public HelloApplication() {
+@ApplicationPath("/read")
+public class NewsApplication extends ResourceConfig {
+    public NewsApplication() {
         property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
 
         AbstractBinder binder = new AbstractBinder() {
@@ -40,7 +40,6 @@ public class HelloApplication extends ResourceConfig {
             }
         };
         register(binder);
-
-        packages("rs.raf.Web_Project.resources.cms", "rs.raf.Web_Project.filters");
+        packages("rs.raf.Web_Project.resources.read", "rs.raf.Web_Project.filters.cors");
     }
 }

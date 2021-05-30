@@ -1,6 +1,8 @@
 package rs.raf.Web_Project.repositories.category;
 
 import rs.raf.Web_Project.entities.Category;
+import rs.raf.Web_Project.entities.User;
+import rs.raf.Web_Project.entities.enums.Type;
 import rs.raf.Web_Project.repositories.MySqlAbstractRepository;
 
 import java.sql.Connection;
@@ -159,5 +161,37 @@ public class MySqlCategoryRepository extends MySqlAbstractRepository implements 
         }
 
         return categories;
+    }
+
+    @Override
+    public Category find(Integer id) {
+        Category category = null;
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM category where categoryId = ?");
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                category = new Category(resultSet.getInt("categoryId"), resultSet.getString("Name"), resultSet.getString("Description"));
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return category;
     }
 }

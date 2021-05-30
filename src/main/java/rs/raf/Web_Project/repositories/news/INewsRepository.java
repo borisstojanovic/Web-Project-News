@@ -18,4 +18,9 @@ public interface INewsRepository {
     int count();
     int countForCategory(int id);
     int countForTag(int id);
+
+    //read service
+    List<News> mostViewed(int start, int size);
+    List<News> allNewest(int start, int size);
+    boolean incrementViews(int id);
 }

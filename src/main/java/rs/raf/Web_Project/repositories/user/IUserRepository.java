@@ -20,4 +20,6 @@ public interface IUserRepository {
     List<User> allPaginated(int start, int size);
 
     int count();
+
+    User findUserById(Integer id);
 }

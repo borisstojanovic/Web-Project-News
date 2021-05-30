@@ -50,4 +50,10 @@ public class NewsService {
     public int countForTag(int id){ return this.newsRepository.countForTag(id); }
 
     public int countForCategory(int id){ return this.newsRepository.countForCategory(id); }
+
+    public List<News> mostViewed(int start, int size) { return this.newsRepository.mostViewed(start, size); }
+
+    public List<News> allNewest(int start, int size) { return this.newsRepository.allNewest(start, size); }
+
+    public boolean incrementViews(int id) { return this.newsRepository.incrementViews(id); }
 }

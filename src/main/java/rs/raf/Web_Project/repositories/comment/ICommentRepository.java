@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ICommentRepository {
 
-    List<Comment> findAll(int postId);
+    List<Comment> findAll(int newsId);
 
     Comment add(Comment comment);
 

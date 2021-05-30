@@ -28,4 +28,6 @@ public class CategoryService {
     public List<Category> allPaginated(int start, int size){ return this.categoryRepository.allPaginated(start, size); }
 
     public int count(){ return this.categoryRepository.count(); }
+
+    public Category find(Integer id) { return this.categoryRepository.find(id); }
 }

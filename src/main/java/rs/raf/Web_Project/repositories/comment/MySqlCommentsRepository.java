@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MySqlCommentsRepository extends MySqlAbstractRepository implements ICommentRepository {
     @Override
-    public List<Comment> findAll(int postId) {
+    public List<Comment> findAll(int newsId) {
         List<Comment> comments = new ArrayList<>();
 
         Connection connection = null;
@@ -19,8 +19,8 @@ public class MySqlCommentsRepository extends MySqlAbstractRepository implements 
         try {
             connection = this.newConnection();
 
-            preparedStatement = connection.prepareStatement("SELECT * FROM comments WHERE post_id = ?");
-            preparedStatement.setInt(1, postId);
+            preparedStatement = connection.prepareStatement("SELECT * FROM comment WHERE newsId = ?");
+            preparedStatement.setInt(1, newsId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 comments.add(new Comment(resultSet.getInt("commentId"), resultSet.getInt("newsId"), resultSet.getString("Author"),
@@ -48,10 +48,10 @@ public class MySqlCommentsRepository extends MySqlAbstractRepository implements 
 
             String[] generatedColumns = {"id"};
 
-            preparedStatement = connection.prepareStatement("INSERT INTO comments (Text, Author, Created_at, newsId) VALUES(?, ?, ?, ?)", generatedColumns);
+            preparedStatement = connection.prepareStatement("INSERT INTO comment (Text, Author, Created_at, newsId) VALUES(?, ?, ?, ?)", generatedColumns);
             preparedStatement.setString(1, comment.getText());
             preparedStatement.setString(2, comment.getAuthor());
-            preparedStatement.setTimestamp(3, new Timestamp(new Date().getTime()));
+            preparedStatement.setTimestamp(3, new Timestamp(comment.getCreatedAt().getTime()));
             preparedStatement.setInt(4, comment.getNewsId());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();

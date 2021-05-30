@@ -11,4 +11,5 @@ public interface ICategoryRepository {
     Category update(Category category);
     List<Category> all();
     List<Category> allPaginated(int start, int size);
+    Category find(Integer id);
 }

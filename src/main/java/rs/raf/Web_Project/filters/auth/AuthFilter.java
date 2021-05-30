@@ -1,9 +1,8 @@
-package rs.raf.Web_Project.filters;
+package rs.raf.Web_Project.filters.auth;
 
-import rs.raf.Web_Project.resources.CategoryResource;
-import rs.raf.Web_Project.resources.CommentResource;
-import rs.raf.Web_Project.resources.NewsResource;
-import rs.raf.Web_Project.resources.UserResource;
+import rs.raf.Web_Project.resources.cms.CategoryResource;
+import rs.raf.Web_Project.resources.cms.NewsResource;
+import rs.raf.Web_Project.resources.cms.UserResource;
 import rs.raf.Web_Project.services.UserService;
 
 import javax.inject.Inject;

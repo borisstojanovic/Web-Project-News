@@ -1,4 +1,4 @@
-package rs.raf.Web_Project.resources;
+package rs.raf.Web_Project.resources.cms;
 
 import rs.raf.Web_Project.entities.Category;
 import rs.raf.Web_Project.entities.Comment;

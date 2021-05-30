@@ -1,4 +1,4 @@
-package rs.raf.Web_Project.filters;
+package rs.raf.Web_Project.filters.cors;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
