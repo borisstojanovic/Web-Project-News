@@ -26,8 +26,8 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements IUse
 
             if(resultSet.next()) {
                 int userId = resultSet.getInt("userId");
-                String firstName = resultSet.getString("LastName");
-                String lastName = resultSet.getString("FirstName");
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
                 String password = resultSet.getString("Password");
                 boolean status = resultSet.getBoolean("Status");
                 Type type = Type.valueOf(resultSet.getString("Type"));
