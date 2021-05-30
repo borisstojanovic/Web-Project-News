@@ -1,5 +1,6 @@
 package rs.raf.Web_Project.entities;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -17,11 +18,11 @@ public class News {
     private Integer views;
 
     @NotNull(message = "Text field is required")
-    @NotEmpty(message = "Text field is required")
+    @NotBlank(message = "Text field is required")
     private String text;
 
     @NotNull(message = "Title field is required")
-    @NotEmpty(message = "Title field is required")
+    @NotBlank(message = "Title field is required")
     private String title;
 
     @NotNull(message = "Created_at field is required")

@@ -1,5 +1,6 @@
 package rs.raf.Web_Project.entities;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -8,11 +9,11 @@ public class Category {
     private Integer id;
 
     @NotNull(message = "Name field is required")
-    @NotEmpty(message = "Name field is required")
+    @NotBlank(message = "Name field is required")
     private String name;
 
     @NotNull(message = "Description field is required")
-    @NotEmpty(message = "Description field is required")
+    @NotBlank(message = "Description field is required")
     private String description;
 
     public Category(){

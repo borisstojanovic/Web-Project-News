@@ -1,5 +1,6 @@
 package rs.raf.Web_Project.entities;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class Tag {
     private Integer id;
 
     @NotNull(message = "Keyword field is required")
-    @NotEmpty(message = "Keyword field is required")
+    @NotBlank(message = "Keyword field is required")
     private String keyword;
 
     private List<News> newsList;

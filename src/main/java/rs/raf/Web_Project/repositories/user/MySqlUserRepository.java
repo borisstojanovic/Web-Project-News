@@ -74,9 +74,12 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements IUse
 
         } catch (SQLException e) {
             e.printStackTrace();
+            user = null;
         } finally {
             this.closeStatement(preparedStatement);
-            this.closeResultSet(resultSet);
+            if(resultSet != null) {
+                this.closeResultSet(resultSet);
+            }
             this.closeConnection(connection);
         }
 
@@ -171,6 +174,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements IUse
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            user = null;
         } finally {
             this.closeStatement(preparedStatement);
             this.closeConnection(connection);

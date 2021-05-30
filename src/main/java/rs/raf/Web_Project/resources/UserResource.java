@@ -28,11 +28,14 @@ public class UserResource {
     public Response create(@Valid User user) {
         try {
             User toReturn = this.userService.create(user);
-            return Response.accepted().entity(toReturn).build();
+            if(toReturn != null) {
+                return Response.accepted().entity(toReturn).build();
+            }
+            return Response.status(404).entity(new RestError(404, "Email already exists!")).build();
         }
         catch(Exception e){
             e.printStackTrace();
-            return Response.serverError().entity(new RestError(404, "Email already exists!")).build();
+            return Response.status(404).entity(new RestError(404, "Email already exists!")).build();
         }
     }
 
@@ -60,11 +63,14 @@ public class UserResource {
     public Response update(@Valid User user) {
         try {
             User toReturn = this.userService.update(user);
-            return Response.accepted().entity(toReturn).build();
+            if(toReturn != null) {
+                return Response.accepted().entity(toReturn).build();
+            }
+            return Response.status(404).entity(new RestError(404, "Email already exists!")).build();
         }
         catch(Exception e){
             e.printStackTrace();
-            return Response.serverError().entity(new RestError(404, "Email already exists!")).build();
+            return Response.status(404).entity(new RestError(404, "Email already exists!")).build();
         }
     }
 

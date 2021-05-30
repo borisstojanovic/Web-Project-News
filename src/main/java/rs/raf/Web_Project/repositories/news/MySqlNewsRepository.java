@@ -45,6 +45,7 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
 
         } catch (SQLException e) {
             e.printStackTrace();
+            news = null;
         } finally {
             this.closeStatement(preparedStatement);
             this.closeResultSet(resultSet);
@@ -84,6 +85,7 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            news = null;
         } finally {
             this.closeStatement(preparedStatement);
             this.closeConnection(connection);

@@ -2,6 +2,7 @@ package rs.raf.Web_Project.entities;
 
 import rs.raf.Web_Project.entities.enums.Type;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -12,23 +13,22 @@ public class User {
     private boolean status;
 
     @NotNull(message = "Type field is required")
-    @NotEmpty(message = "Type field is required")
     private Type type;
 
     @NotNull(message = "Email field is required")
-    @NotEmpty(message = "Email field is required")
+    @NotBlank(message = "Email field is required")
     private String email;
 
     @NotNull(message = "First_Name field is required")
-    @NotEmpty(message = "First_Name field is required")
+    @NotBlank(message = "First_Name field is required")
     private String firstName;
 
     @NotNull(message = "Last_Name field is required")
-    @NotEmpty(message = "Last_Name field is required")
+    @NotBlank(message = "Last_Name field is required")
     private String lastName;
 
     @NotNull(message = "Password field is required")
-    @NotEmpty(message = "Password field is required")
+    @NotBlank(message = "Password field is required")
     private String password;
 
     public User() {

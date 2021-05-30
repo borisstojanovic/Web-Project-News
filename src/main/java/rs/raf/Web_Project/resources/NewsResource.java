@@ -19,11 +19,31 @@ public class NewsResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public News add(@Valid News news) { return this.newsService.add(news); }
+    public Response add(@Valid News news) {
+        try{
+            News toReturn = this.newsService.add(news);
+            if(toReturn != null){
+                return Response.accepted().entity(toReturn).build();
+            }
+            return Response.status(404).entity(new RestError(404, "Save not successful")).build();
+        }catch (Exception e){
+            return Response.status(404).entity(new RestError(404, "Save not successful")).build();
+        }
+    }
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    public News update(@Valid News news) { return this.newsService.update(news); }
+    public Response update(@Valid News news) {
+        try{
+            News toReturn = this.newsService.update(news);
+            if(toReturn != null){
+                return Response.accepted().entity(toReturn).build();
+            }
+            return Response.status(404).entity(new RestError(404, "Save not successful")).build();
+        }catch (Exception e){
+            return Response.status(404).entity(new RestError(404, "Save not successful")).build();
+        }
+    }
 
     @DELETE
     @Path("/{id}")
