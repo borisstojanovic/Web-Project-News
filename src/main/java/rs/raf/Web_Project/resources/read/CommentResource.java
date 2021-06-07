@@ -1,12 +1,18 @@
 package rs.raf.Web_Project.resources.read;
 
 import rs.raf.Web_Project.entities.Comment;
+import rs.raf.Web_Project.entities.News;
+import rs.raf.Web_Project.response.PageResponse;
+import rs.raf.Web_Project.response.RestError;
 import rs.raf.Web_Project.services.CommentService;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/comments")
@@ -16,7 +22,15 @@ public class CommentResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Comment create(@Valid Comment comment) { return this.commentService.addComment(comment); }
+    public Response create(@Valid Comment comment) {
+        try{
+            comment = this.commentService.addComment(comment);
+            return Response.status(200).entity(comment).build();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Response.status(404).entity(new RestError(404, "Validation failed - All fields are required")).build();
+        }
+    }
 
     @GET
     @Path("/{id}")

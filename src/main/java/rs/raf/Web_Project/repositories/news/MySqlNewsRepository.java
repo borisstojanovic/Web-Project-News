@@ -125,6 +125,7 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             if (resultSet.next()) {
                 news = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
                         resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                news.setViews(resultSet.getInt("Views"));
             }
 
         } catch (Exception e) {
@@ -151,8 +152,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement = connection.prepareStatement("SELECT * FROM news");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
 
         } catch (Exception e) {
@@ -180,8 +183,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(1, categoryId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
 
         } catch (Exception e) {
@@ -210,8 +215,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(3, size);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
 
         } catch (Exception e) {
@@ -237,8 +244,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(1, tagId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
             /*
             //todo dodavanje liste tagova
@@ -280,8 +289,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(2, size);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
 
         } catch (Exception e) {
@@ -310,8 +321,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(3, size);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
 
         } catch (Exception e) {
@@ -404,7 +417,7 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
         ResultSet resultSet = null;
         try {
             connection = this.newConnection();
-            preparedStatement = connection.prepareStatement("SELECT * FROM news where Created_at between DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW() order by Views, Created_at desc limit ?, ?");
+            preparedStatement = connection.prepareStatement("SELECT * FROM news where Created_at between DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW() order by Views desc, Created_at desc limit ?, ?");
             if(size > 10){
                 size = 10;
             }
@@ -412,8 +425,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(2, size);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
 
         } catch (Exception e) {
@@ -443,8 +458,10 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
             preparedStatement.setInt(2, size);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                news.add(new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
-                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at")));
+                News toAdd = new News(resultSet.getInt("newsId"), resultSet.getInt("categoryId"), resultSet.getInt("userId"), resultSet.getString("Text"),
+                        resultSet.getString("Title"), resultSet.getTimestamp("Created_at"));
+                toAdd.setViews(resultSet.getInt("Views"));
+                news.add(toAdd);
             }
 
         } catch (Exception e) {
@@ -465,8 +482,7 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements INew
         PreparedStatement preparedStatement = null;
         try {
             connection = this.newConnection();
-            String[] generatedColumns = {"id"};
-            preparedStatement = connection.prepareStatement("UPDATE news set Views = Views+1 where newsId = ?", generatedColumns);
+            preparedStatement = connection.prepareStatement("UPDATE news set Views = Views + 1 where newsId = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             incremented = true;

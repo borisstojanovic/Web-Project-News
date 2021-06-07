@@ -46,13 +46,18 @@ public class UserResource {
     {
         Map<String, Object> response = new HashMap<>();
 
-        String jwt = this.userService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        if (jwt == null) {
+        String loginResponse = this.userService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (loginResponse == null) {
             response.put("message", "These credentials do not match our records");
             return Response.status(422, "Unprocessable Entity").entity(response).build();
         }
 
-        response.put("jwt", this.userService.login(loginRequest.getEmail(), loginRequest.getPassword()));
+        if(loginResponse.equals("Inactive")){
+            response.put("message", "Inactive user");
+            return Response.status(422, "Unprocessable Entity").entity(response).build();
+        }
+
+        response.put("jwt", loginResponse);
         response.put("user", this.userService.find(loginRequest.getEmail()));
 
         return Response.ok(response).build();

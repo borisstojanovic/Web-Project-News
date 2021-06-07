@@ -40,6 +40,6 @@ public class NewsApplication extends ResourceConfig {
             }
         };
         register(binder);
-        packages("rs.raf.Web_Project.resources.read", "rs.raf.Web_Project.filters.cors");
+        packages("rs.raf.Web_Project.resources.read", "rs.raf.Web_Project.filters.cors",  "rs.raf.Web_Project.errorhandler");
     }
 }

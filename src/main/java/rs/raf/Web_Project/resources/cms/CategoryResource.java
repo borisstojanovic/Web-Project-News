@@ -69,4 +69,9 @@ public class CategoryResource {
         int count = this.categoryService.count();
         return Response.status(200).entity(new PageResponse(categories, count)).build();
     }
+
+    @GET
+    @Path("/find/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Category find(@PathParam("id") Integer id) { return this.categoryService.find(id); }
 }

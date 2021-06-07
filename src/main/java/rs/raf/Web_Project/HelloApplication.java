@@ -41,6 +41,6 @@ public class HelloApplication extends ResourceConfig {
         };
         register(binder);
 
-        packages("rs.raf.Web_Project.resources.cms", "rs.raf.Web_Project.filters");
+        packages("rs.raf.Web_Project.resources.cms", "rs.raf.Web_Project.filters", "rs.raf.Web_Project.errorhandler");
     }
 }

@@ -45,8 +45,11 @@ public class UserService {
     {
         String hashedPassword = DigestUtils.sha256Hex(password);
         User user = this.userRepository.findUser(email);
-        if (user == null || !user.getPassword().equals(hashedPassword) || (!user.isStatus() && user.getType().equals(Type.CREATOR))) {
+        if (user == null || !user.getPassword().equals(hashedPassword)) {
             return null;
+        }
+        if(!user.isStatus()){
+            return "Inactive";
         }
 
         Date issuedAt = new Date();
