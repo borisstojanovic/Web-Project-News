@@ -38,4 +38,13 @@ public class CommentResource {
     public List<Comment> find(@PathParam("id") Integer id) {
         return this.commentService.allCommentsForPost(id);
     }
+
+    @GET
+    @Path("/page/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allPaginatedForCategory(@PathParam("id") Integer id, @QueryParam("start") int start, @QueryParam("size") int size) {
+        List<Comment> news = this.commentService.allPaginated(start, size, id);
+        int count = this.commentService.count(id);
+        return Response.status(200).entity(new PageResponse(news, count)).build();
+    }
 }

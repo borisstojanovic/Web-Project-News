@@ -8,6 +8,9 @@ public interface ICommentRepository {
 
     List<Comment> findAll(int newsId);
 
+    List<Comment> allPaginated(int start, int size, int newsId);
+
     Comment add(Comment comment);
 
+    int count(Integer id);
 }

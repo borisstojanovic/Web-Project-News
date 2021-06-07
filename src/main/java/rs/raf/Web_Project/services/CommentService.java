@@ -22,4 +22,12 @@ public class CommentService {
     public List<Comment> allCommentsForPost(Integer id) {
         return this.commentRepository.findAll(id);
     }
+
+    public int count(Integer id) {
+        return this.commentRepository.count(id);
+    }
+
+    public List<Comment> allPaginated(int start, int size, Integer id) {
+        return this.commentRepository.allPaginated(start, size, id);
+    }
 }
